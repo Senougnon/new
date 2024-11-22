@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Convertisseur GSM Bénin - Evisions</title>
+    <style>
+        :root {
+            --primary-color: #1a73e8;
+            --success-color: #34a853;
+            --warning-color: #fbbc04;
+            --error-color: #ea4335;
+            --background-color: #f8f9fa;
+            --surface-color: #ffffff;
+            --text-primary: #202124;
+            --text-secondary: #5f6368;
+            --spacing-unit: 0.5rem;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+
+        body {
+            font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            line-height: 1.5;
+            min-height: 100vh;
+            max-width: 100vw;
+            overflow-x: hidden;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        /* Company Banner */
+        .company-banner {
+            background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .company-banner h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .company-banner p {
+            font-size: 1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .services-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .service-tag {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        /* App Container */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        /* Header */
+        .header {
+            padding: 1rem;
+            background: var(--surface-color);
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Info Banner */
+        .info-banner {
+            background: #e3f2fd;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            background: var(--surface-color);
+            border-radius: 12px;
+            padding: 0.25rem;
+            margin-bottom: 1rem;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tab {
+            flex: 1;
+            min-width: 120px;
+            padding: 0.75rem 1rem;
+            border: none;
+            background: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s;
+            scroll-snap-align: start;
+            cursor: pointer;
+        }
+
+        .tab.active {
+            color: var(--primary-color);
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 10%;
+            right: 10%;
+            height: 3px;
+            background: var(--primary-color);
+            border-radius: 1.5px;
+        }
+
+        /* Content Panels */
+        .panel {
+            display: none;
+            background: var(--surface-color);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            animation: slideIn 0.3s ease;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Contact List */
+        .contact-list {
+            max-height: 70vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .contact-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 24px;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .contact-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .contact-name {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .contact-numbers {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .contact-status {
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-warning {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .status-success {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        /* Buttons */
+        .button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            background: var(--primary-color);
+            color: white;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .button:active {
+            transform: scale(0.98);
+        }
+
+        .button.secondary {
+            background: var(--success-color);
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-color);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Input Fields */
+        .input-area {
+            margin-bottom: 1rem;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 1rem;
+            resize: vertical;
+            margin-bottom: 1rem;
+        }
+
+        /* Checkbox Styles */
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: #f5f5f5;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            margin-right: 0.5rem;
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Enhanced Footer Styles */
+        .footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            background: linear-gradient(135deg, #788d01 0%, #292929 100%);
+            margin-top: 2rem;
+            border-radius: 16px;
+            color: white;
+            box-shadow: 0 4px 15px rgba(26, 115, 232, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%);
+            animation: shine 3s infinite linear;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .footer p {
+            margin-bottom: 0.8rem;
+            opacity: 0.9;
+            transition: opacity 0.3s;
+            animation: fadeInUp 0.5s ease forwards;
+            opacity: 0;
+        }
+
+        .footer strong {
+            color: #FFD700;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .footer a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .footer a:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        /* Footer Popup Styles */
+        .footer-popup {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translate(-50%, 200%);
+            width: 90%;
+            max-width: 500px;
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
+            color: white;
+        }
+
+        .footer-popup.show {
+            transform: translate(-50%, 0);
+            opacity: 1;
+        }
+
+        .footer-popup .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .footer-popup .close-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: rotate(90deg);
+        }
+
+        .footer-popup p {
+            margin-bottom: 0.8rem;
+            opacity: 0.9;
+            animation: fadeInUp 0.5s ease forwards;
+            opacity: 0;
+        }
+
+        .footer-popup strong {
+            color: #FFD700;
+            font-weight: 600;
+        }
+
+        .footer-popup a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .footer-popup a:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .footer p:nth-child(1), .footer-popup p:nth-child(1) { animation-delay: 0.1s; }
+        .footer p:nth-child(2), .footer-popup p:nth-child(2) { animation-delay: 0.2s; }
+        .footer p:nth-child(3), .footer-popup p:nth-child(3) { animation-delay: 0.3s; }
+        .footer p:nth-child(4), .footer-popup p:nth-child(4) { animation-delay: 0.4s; }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 24px;
+            font-weight: 500;
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .toast.visible {
+            opacity: 1;
+        }
+
+        /* Bottom Sheet */
+        .bottom-sheet {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--surface-color);
+            border-radius: 20px 20px 0 0;
+            padding: 1rem;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .bottom-sheet.active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 380px) {
+            .contact-avatar {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .button {
+                padding: 0.75rem;
+            }
+            
+            .header h1 {font-size: 1.25rem;
+            }
+            
+            .company-banner h2 {
+                font-size: 1.25rem;
+            }
+            
+            .service-tag {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Convertisseur GSM Bénin</h1>
+            <div class="info-banner">
+                Passage au format 10 chiffres : ajout du préfixe "01"<br>
+                Ex: +22960374877 → +2290160374877
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('contacts')">Contacts</button>
+            <button class="tab" onclick="switchTab('manual')">Manuel</button>
+            <button class="tab" onclick="switchTab('import')">Importer</button>
+        </div>
+
+        <!-- Panneau des contacts -->
+        <div id="contacts-panel" class="panel active">
+            <button class="button" onclick="requestContacts()">
+                Accéder aux contacts
+            </button>
+            <div class="checkbox-wrapper">
+                <input type="checkbox" id="autoUpdate" checked>
+                <label for="autoUpdate">Mettre à jour automatiquement</label>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <div id="contacts-status"></div>
+            <div class="contact-list" id="contacts-list"></div>
+        </div>
+
+        <!-- Panneau de saisie manuelle -->
+        <div id="manual-panel" class="panel">
+            <div class="input-area">
+                <textarea placeholder="Entrez vos numéros (un par ligne)&#10;Exemple:&#10;+22960374877&#10;97123456"></textarea>
+                <button class="button" onclick="convertManualNumbers()">Convertir</button>
+            </div>
+        </div>
+
+        <!-- Panneau d'import -->
+        <div id="import-panel" class="panel">
+            <div class="file-upload-area">
+                <button class="button" onclick="triggerFileInput()">
+                    Choisir un fichier
+                </button>
+                <input type="file" id="file-input" accept=".csv,.vcf" style="display: none">
+                <p class="text-center">Formats supportés : CSV, VCF</p>
+            </div>
+        </div>
+
+        <!-- Footer avec informations de contact -->
+        <div class="footer">
+            <p>Développé par <strong>Evisions</strong></p>
+            <p>Pour vos projets digitaux, contactez nous :</p>
+            <p><a href="http://wa.me/22960374877">+229 60374877</a></p>
+            <p>Services : Création de sites web, applications mobiles,<br>
+               maintenance réseau & informatique, installation WiFi zone<br>
+               et solutions digitales sur mesure</p>
+        </div>
+    </div>
+
+    <!-- Footer Popup -->
+    <div class="footer-popup" id="footer-popup">
+        <button class="close-btn" onclick="closeFooterPopup()">×</button>
+        <p>Développé par <strong>Evisions</strong></p>
+        <p>Pour vos projets digitaux, contactez nous :</p>
+        <p><a href="http://wa.me/22960374877">+229 60374877</a></p>
+
+    </div>
+
+    <!-- Bottom Sheet pour les actions -->
+    <div class="bottom-sheet" id="actions-sheet">
+        <div class="bottom-sheet-header">
+            <h3>Actions disponibles</h3>
+            <button onclick="closeBottomSheet()">Fermer</button>
+        </div>
+        <div class="action-buttons">
+            <button class="button" onclick="updateContacts()">
+                Mettre à jour les contacts
+            </button>
+            <button class="button secondary" onclick="exportContacts('csv')">
+                Exporter en CSV
+            </button>
+            <button class="button secondary" onclick="exportContacts('vcf')">
+                Exporter en VCF
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+function _0x9c63(_0x49b7f0,_0x54e0cb){const _0x30ec7e=_0x30ec();return _0x9c63=function(_0x9c636c,_0x597954){_0x9c636c=_0x9c636c-0x1e2;let _0x43245d=_0x30ec7e[_0x9c636c];return _0x43245d;},_0x9c63(_0x49b7f0,_0x54e0cb);}const _0x36289a=_0x9c63;(function(_0x551960,_0x408bc8){const _0x3fd0e4=_0x9c63,_0x4fe40a=_0x551960();while(!![]){try{const _0x41fd9f=-parseInt(_0x3fd0e4(0x1f1))/0x1+-parseInt(_0x3fd0e4(0x236))/0x2+parseInt(_0x3fd0e4(0x22a))/0x3+-parseInt(_0x3fd0e4(0x1e7))/0x4+-parseInt(_0x3fd0e4(0x24b))/0x5+parseInt(_0x3fd0e4(0x209))/0x6*(-parseInt(_0x3fd0e4(0x201))/0x7)+parseInt(_0x3fd0e4(0x214))/0x8;if(_0x41fd9f===_0x408bc8)break;else _0x4fe40a['push'](_0x4fe40a['shift']());}catch(_0x1f17df){_0x4fe40a['push'](_0x4fe40a['shift']());}}}(_0x30ec,0x50245));let currentContacts=[],processedContacts=[];function switchTab(_0x295b6c){const _0x740b1e=_0x9c63;document[_0x740b1e(0x1e4)](_0x740b1e(0x235))['forEach'](_0x193f29=>{const _0x35e150=_0x740b1e;_0x193f29[_0x35e150(0x23c)]['remove'](_0x35e150(0x1fe));}),document['querySelectorAll'](_0x740b1e(0x22b))[_0x740b1e(0x1e5)](_0xcbae34=>{const _0xf57a44=_0x740b1e;_0xcbae34[_0xf57a44(0x23c)][_0xf57a44(0x23a)](_0xf57a44(0x1fe));}),document[_0x740b1e(0x20e)](_0x740b1e(0x203)+_0x295b6c+'\x27)\x22]')[_0x740b1e(0x23c)][_0x740b1e(0x248)](_0x740b1e(0x1fe)),document[_0x740b1e(0x234)](_0x295b6c+_0x740b1e(0x21e))[_0x740b1e(0x23c)][_0x740b1e(0x248)]('active');}function showToast(_0x49d261,_0x54cfec=0xbb8){const _0x183715=_0x9c63,_0x5734a4=document[_0x183715(0x234)](_0x183715(0x240));_0x5734a4['textContent']=_0x49d261,_0x5734a4[_0x183715(0x23c)][_0x183715(0x248)]('visible'),setTimeout(()=>{const _0x1a450e=_0x183715;_0x5734a4[_0x1a450e(0x23c)][_0x1a450e(0x23a)](_0x1a450e(0x20c));},_0x54cfec);}function convertPhoneNumber(_0x35cc5c){const _0x34f9aa=_0x9c63;let _0x4d162e=_0x35cc5c[_0x34f9aa(0x1e9)](/[\s\-\(\)]/g,'');if(_0x4d162e[_0x34f9aa(0x239)]('01'))return{'number':_0x4d162e,'wasConverted':![]};if(_0x4d162e['startsWith'](_0x34f9aa(0x247)))return{'number':_0x4d162e[_0x34f9aa(0x24c)](0x0,0x4)+'01'+_0x4d162e['slice'](0x4),'wasConverted':!![]};else{if(_0x4d162e[_0x34f9aa(0x216)](_0x34f9aa(0x222)))return{'number':'+'+_0x4d162e['slice'](0x0,0x3)+'01'+_0x4d162e[_0x34f9aa(0x24c)](0x3),'wasConverted':!![]};else{if(_0x4d162e[_0x34f9aa(0x231)]===0x8)return{'number':_0x34f9aa(0x1f5)+_0x4d162e,'wasConverted':!![]};}}return{'number':_0x4d162e,'wasConverted':![],'isValid':![]};}function convertManualNumbers(){const _0xfda7e1=_0x9c63,_0x7a9ff7=document[_0xfda7e1(0x20e)]('#manual-panel\x20textarea')[_0xfda7e1(0x1f3)],_0x569291=_0x7a9ff7[_0xfda7e1(0x1f2)]('\x0a')[_0xfda7e1(0x1e8)](_0x244af5=>_0x244af5['trim']());if(_0x569291[_0xfda7e1(0x231)]===0x0){showToast('Veuillez\x20entrer\x20au\x20moins\x20un\x20numéro');return;}const _0x4cf965=_0x569291[_0xfda7e1(0x250)](_0x40f21a=>{const _0x43e6c3=_0xfda7e1,_0xed0a65=convertPhoneNumber(_0x40f21a[_0x43e6c3(0x23e)]());return _0xed0a65['number'];});document[_0xfda7e1(0x20e)]('#manual-panel\x20textarea')[_0xfda7e1(0x1f3)]=_0x4cf965[_0xfda7e1(0x202)]('\x0a'),showToast(_0x569291['length']+'\x20numéro(s)\x20traité(s)');}async function requestContacts(){const _0x5580e4=_0x9c63;try{const _0x2bf0ce=document['getElementById'](_0x5580e4(0x21d));_0x2bf0ce[_0x5580e4(0x229)]='<div\x20class=\x22loading\x22>Chargement\x20des\x20contacts...</div>';if(!('contacts'in navigator&&_0x5580e4(0x213)in window))throw new Error(_0x5580e4(0x24e));const _0x218e34=[_0x5580e4(0x21b),_0x5580e4(0x244)],_0x17ea80={'multiple':!![]},_0x1dd0c2=await navigator[_0x5580e4(0x1f0)][_0x5580e4(0x249)](_0x218e34,_0x17ea80);processContacts(_0x1dd0c2);}catch(_0x212bf9){showToast(_0x5580e4(0x23f)+_0x212bf9[_0x5580e4(0x22e)]),document[_0x5580e4(0x234)](_0x5580e4(0x20d))[_0x5580e4(0x229)]=_0x5580e4(0x1eb)+_0x212bf9['message']+_0x5580e4(0x228);}}function processContacts(_0x4043e4){const _0x848aae=_0x9c63;currentContacts=_0x4043e4;const _0x4afa9c=document[_0x848aae(0x234)](_0x848aae(0x21d));_0x4afa9c['innerHTML']='';if(_0x4043e4[_0x848aae(0x231)]===0x0){showToast(_0x848aae(0x1ed));return;}processedContacts=_0x4043e4[_0x848aae(0x250)](_0x881460=>{const _0x7a33fe=_0x848aae,_0x5049ee=_0x881460['tel']||[],_0x14c605=_0x5049ee[_0x7a33fe(0x250)](_0x59e035=>convertPhoneNumber(_0x59e035)),_0x12b861=_0x14c605['some'](_0x59881e=>_0x59881e['wasConverted']),_0x4738a0=document['createElement']('div');return _0x4738a0['className']=_0x7a33fe(0x1ee),_0x4738a0['innerHTML']=_0x7a33fe(0x242)+(_0x881460[_0x7a33fe(0x21b)]&&_0x881460['name'][0x0]?_0x881460['name'][0x0][0x0][_0x7a33fe(0x208)]():'?')+'\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22contact-details\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22contact-name\x22>'+(_0x881460['name']?_0x881460[_0x7a33fe(0x21b)][0x0]:_0x7a33fe(0x1fa))+_0x7a33fe(0x238)+_0x14c605['map'](_0x5e45ff=>_0x5e45ff['number'])[_0x7a33fe(0x202)](',\x20')+_0x7a33fe(0x210)+(_0x12b861?'status-warning':_0x7a33fe(0x1ea))+_0x7a33fe(0x22f)+(_0x12b861?_0x7a33fe(0x226):_0x7a33fe(0x23b))+_0x7a33fe(0x205),_0x4afa9c['appendChild'](_0x4738a0),{'original':_0x881460,'converted':_0x14c605,'needsUpdate':_0x12b861};}),updateProgress(processedContacts),document[_0x848aae(0x234)](_0x848aae(0x212))[_0x848aae(0x20b)]&&updateContacts();}async function updateContacts(){const _0x4627cd=_0x9c63,_0x40dbd1=processedContacts[_0x4627cd(0x1e8)](_0x2c70f6=>_0x2c70f6[_0x4627cd(0x22d)]);if(_0x40dbd1['length']===0x0){showToast('Tous\x20les\x20contacts\x20sont\x20déjà\x20à\x20jour');return;}try{const _0x21a91b=document[_0x4627cd(0x20e)](_0x4627cd(0x1fd));for(let _0x2846a0=0x0;_0x2846a0<=0x64;_0x2846a0++){_0x21a91b['style'][_0x4627cd(0x215)]=_0x2846a0+'%',await new Promise(_0x1f5cbc=>setTimeout(_0x1f5cbc,0x14));}let _0x92d90d='';_0x40dbd1[_0x4627cd(0x1e5)](_0x2735f4=>{const _0x5c064e=_0x4627cd;_0x92d90d+=_0x5c064e(0x219),_0x92d90d+=_0x5c064e(0x217)+(_0x2735f4[_0x5c064e(0x1fc)][_0x5c064e(0x21b)]?_0x2735f4[_0x5c064e(0x1fc)][_0x5c064e(0x21b)][0x0]:_0x5c064e(0x24d))+'\x0a',_0x2735f4['converted'][_0x5c064e(0x1e5)](_0xf0d23=>{const _0x3c4077=_0x5c064e;_0x92d90d+=_0x3c4077(0x227)+_0xf0d23[_0x3c4077(0x237)]+'\x0a';}),_0x92d90d+=_0x5c064e(0x1f9);}),downloadFile(_0x92d90d,_0x4627cd(0x1ec),_0x4627cd(0x221)),showToast(_0x40dbd1[_0x4627cd(0x231)]+_0x4627cd(0x20a));}catch(_0x5d44dd){showToast(_0x4627cd(0x223)+_0x5d44dd[_0x4627cd(0x22e)]);}}function updateProgress(_0x590e7a){const _0x386bc4=_0x9c63,_0x3492db=_0x590e7a[_0x386bc4(0x231)],_0x5de5de=_0x590e7a[_0x386bc4(0x1e8)](_0x259bc7=>!_0x259bc7[_0x386bc4(0x22d)])[_0x386bc4(0x231)],_0x2221fd=_0x5de5de/_0x3492db*0x64;document['querySelector'](_0x386bc4(0x1fd))['style'][_0x386bc4(0x215)]=_0x2221fd+'%',document[_0x386bc4(0x234)](_0x386bc4(0x20d))['textContent']=_0x5de5de+'/'+_0x3492db+'\x20contacts\x20à\x20jour';}function exportContacts(_0x3d691a){const _0x5051de=_0x9c63;if(!processedContacts[_0x5051de(0x231)]){showToast(_0x5051de(0x24a));return;}if(_0x3d691a==='csv'){let _0x5afd2f=_0x5051de(0x241);processedContacts[_0x5051de(0x1e5)](_0x3ea1e7=>{const _0x3eecfd=_0x5051de,_0x3023a5=_0x3ea1e7[_0x3eecfd(0x1fc)]['name']?_0x3ea1e7[_0x3eecfd(0x1fc)]['name'][0x0]:_0x3eecfd(0x24d);_0x3ea1e7['converted'][_0x3eecfd(0x1e5)](_0x17ec0f=>{const _0xa44fa9=_0x3eecfd;_0x5afd2f+='\x22'+_0x3023a5+_0xa44fa9(0x233)+_0x17ec0f['number']+'\x22\x0a';});}),downloadFile(_0x5afd2f,'contacts.csv',_0x5051de(0x24f));}else{let _0x2ec0ba='';processedContacts['forEach'](_0x403d69=>{const _0xd2380c=_0x5051de;_0x2ec0ba+='BEGIN:VCARD\x0aVERSION:3.0\x0a',_0x2ec0ba+=_0xd2380c(0x217)+(_0x403d69[_0xd2380c(0x1fc)][_0xd2380c(0x21b)]?_0x403d69[_0xd2380c(0x1fc)][_0xd2380c(0x21b)][0x0]:_0xd2380c(0x24d))+'\x0a',_0x403d69[_0xd2380c(0x1e3)]['forEach'](_0x45ff07=>{const _0x25a199=_0xd2380c;_0x2ec0ba+=_0x25a199(0x227)+_0x45ff07['number']+'\x0a';}),_0x2ec0ba+=_0xd2380c(0x1f9);}),downloadFile(_0x2ec0ba,'contacts.vcf',_0x5051de(0x221));}showToast(_0x5051de(0x220)+_0x3d691a[_0x5051de(0x208)]()+_0x5051de(0x1f4));}function downloadFile(_0x5c8350,_0x17342a,_0x3f6cc8){const _0x793e30=_0x9c63,_0x66cf69=new Blob([_0x5c8350],{'type':_0x3f6cc8}),_0x24498e=URL[_0x793e30(0x22c)](_0x66cf69),_0x50d30d=document[_0x793e30(0x1fb)]('a');_0x50d30d['href']=_0x24498e,_0x50d30d[_0x793e30(0x245)]=_0x17342a,document[_0x793e30(0x1e2)][_0x793e30(0x1f7)](_0x50d30d),_0x50d30d['click'](),document[_0x793e30(0x1e2)][_0x793e30(0x211)](_0x50d30d),URL[_0x793e30(0x207)](_0x24498e);}function triggerFileInput(){const _0x5d5cc8=_0x9c63;document[_0x5d5cc8(0x234)](_0x5d5cc8(0x1e6))[_0x5d5cc8(0x224)]();}document[_0x36289a(0x234)](_0x36289a(0x1e6))[_0x36289a(0x21f)](_0x36289a(0x21a),function(_0x16cbd6){const _0x5d36d3=_0x36289a,_0x368885=_0x16cbd6[_0x5d36d3(0x20f)]['files'][0x0];if(!_0x368885)return;const _0xaa04fd=new FileReader();_0xaa04fd[_0x5d36d3(0x1ef)]=function(_0x3550dd){const _0x154dc4=_0x5d36d3,_0x506dea=_0x3550dd[_0x154dc4(0x20f)]['result'];if(_0x368885[_0x154dc4(0x21b)][_0x154dc4(0x1f8)](_0x154dc4(0x21c)))parseCSV(_0x506dea);else _0x368885[_0x154dc4(0x21b)][_0x154dc4(0x1f8)](_0x154dc4(0x246))&&parseVCard(_0x506dea);},_0xaa04fd[_0x5d36d3(0x206)](_0x368885);});function _0x30ec(){const _0x5284d1=['Nom,Numéro\x0a','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22contact-avatar\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','DOMContentLoaded','tel','download','.vcf','+229','add','select','Aucun\x20contact\x20à\x20exporter','1275060TbxEdA','slice','Contact','L\x27API\x20Contacts\x20n\x27est\x20pas\x20disponible\x20sur\x20votre\x20appareil','text/csv','map','body','converted','querySelectorAll','forEach','file-input','420768pubMJo','filter','replace','status-success','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22error-box\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>','contacts_convertis.vcf','Aucun\x20contact\x20sélectionné','contact-item','onload','contacts','16345tJpySK','split','value','\x20terminé','+22901','convertedNumber','appendChild','endsWith','END:VCARD\x0a','Sans\x20nom','createElement','original','.progress-fill','active','wasConverted','manual','49357lvvbWU','join','.tab[onclick=\x22switchTab(\x27','END:VCARD','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','readAsText','revokeObjectURL','toUpperCase','30SJPCkD','\x20contact(s)\x20mis\x20à\x20jour','checked','visible','contacts-status','querySelector','target','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22contact-status\x20','removeChild','autoUpdate','ContactsManager','5698736RaaTus','width','startsWith','FN:','disabled','BEGIN:VCARD\x0aVERSION:3.0\x0a','change','name','.csv','contacts-list','-panel','addEventListener','Export\x20en\x20','text/vcard','229','Erreur\x20lors\x20de\x20la\x20mise\x20à\x20jour\x20:\x20','click','\x20contact(s)\x20importé(s)','À\x20convertir','TEL:','</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>Cette\x20fonction\x20nécessite\x20un\x20appareil\x20mobile\x20compatible.</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','innerHTML','1634772cpFiNC','.panel','createObjectURL','needsUpdate','message','\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','[onclick=\x22switchTab(\x27contacts\x27)\x22]','length','setAttribute','\x22,\x22','getElementById','.tab','1034402VdnpRZ','number','</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22contact-numbers\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','includes','remove','À\x20jour','classList','#manual-panel\x20textarea','trim','Erreur:\x20','toast'];_0x30ec=function(){return _0x5284d1;};return _0x30ec();}function parseCSV(_0xc0db3d){const _0x1ae77f=_0x36289a,_0x259980=_0xc0db3d[_0x1ae77f(0x1f2)]('\x0a'),_0x35a63e=_0x259980[_0x1ae77f(0x1e8)](_0x545187=>_0x545187[_0x1ae77f(0x23e)]())[_0x1ae77f(0x250)](_0x4622a9=>{const _0x42fe11=_0x1ae77f,[_0x194273,_0x1a88f2]=_0x4622a9[_0x42fe11(0x1f2)](',')[_0x42fe11(0x250)](_0x2bbe1d=>_0x2bbe1d[_0x42fe11(0x23e)]()[_0x42fe11(0x1e9)](/"/g,''));return{'name':_0x194273,'number':_0x1a88f2};});processImportedContacts(_0x35a63e);}function parseVCard(_0xe67e20){const _0x673d66=_0x36289a,_0x6184ed=[];let _0x5c1049=null;_0xe67e20[_0x673d66(0x1f2)]('\x0a')[_0x673d66(0x1e5)](_0x4424e3=>{const _0x8af0af=_0x673d66;_0x4424e3=_0x4424e3[_0x8af0af(0x23e)]();if(_0x4424e3[_0x8af0af(0x216)]('BEGIN:VCARD'))_0x5c1049={};else{if(_0x4424e3['startsWith']('FN:'))_0x5c1049['name']=_0x4424e3[_0x8af0af(0x24c)](0x3);else{if(_0x4424e3[_0x8af0af(0x216)](_0x8af0af(0x227)))_0x5c1049[_0x8af0af(0x237)]=_0x4424e3[_0x8af0af(0x24c)](0x4);else _0x4424e3[_0x8af0af(0x216)](_0x8af0af(0x204))&&(_0x5c1049[_0x8af0af(0x237)]&&_0x6184ed['push'](_0x5c1049),_0x5c1049=null);}}}),processImportedContacts(_0x6184ed);}function processImportedContacts(_0x2c6913){const _0x16eeca=_0x36289a,_0x33d8d1=_0x2c6913[_0x16eeca(0x250)](_0x19be49=>{const _0x1e454d=_0x16eeca,_0x7ba334=convertPhoneNumber(_0x19be49[_0x1e454d(0x237)]);return{'name':_0x19be49[_0x1e454d(0x21b)],'originalNumber':_0x19be49[_0x1e454d(0x237)],'convertedNumber':_0x7ba334['number'],'wasConverted':_0x7ba334[_0x1e454d(0x1ff)]};});displayImportedContacts(_0x33d8d1);}function displayImportedContacts(_0x36d594){const _0x132677=_0x36289a;switchTab(_0x132677(0x200));const _0x5f35d2=document[_0x132677(0x20e)](_0x132677(0x23d));_0x5f35d2['value']=_0x36d594[_0x132677(0x250)](_0xdd5537=>_0xdd5537[_0x132677(0x21b)]+':\x20'+_0xdd5537[_0x132677(0x1f6)])[_0x132677(0x202)]('\x0a'),showToast(_0x36d594[_0x132677(0x231)]+_0x132677(0x225));}function showFooterPopup(){const _0x4426b3=_0x36289a,_0x745937=document[_0x4426b3(0x234)]('footer-popup');_0x745937[_0x4426b3(0x23c)][_0x4426b3(0x248)]('show'),setTimeout(()=>{closeFooterPopup();},0x7530);}function closeFooterPopup(){const _0x34a226=_0x36289a,_0x2a5749=document[_0x34a226(0x234)]('footer-popup');_0x2a5749[_0x34a226(0x23c)][_0x34a226(0x23a)]('show');}document[_0x36289a(0x21f)](_0x36289a(0x243),function(){const _0x1198c8=_0x36289a;!(_0x1198c8(0x1f0)in navigator)?(document[_0x1198c8(0x20e)](_0x1198c8(0x230))[_0x1198c8(0x232)](_0x1198c8(0x218),'disabled'),switchTab(_0x1198c8(0x200))):switchTab(_0x1198c8(0x1f0)),setTimeout(showFooterPopup,0x2710);});
+    </script>
+</body>
+</html>
